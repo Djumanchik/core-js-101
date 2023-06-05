@@ -558,8 +558,18 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+
+function group(array, keySelector, valueSelector) {
+  return array.reduce((acc, elem) => {
+    const key = keySelector(elem);
+    const value = valueSelector(elem);
+    if (!acc.has(key)) {
+      acc.set(key, []);
+    }
+    const cities = acc.get(key);
+    cities.push(value);
+    return acc;
+  }, new Map());
 }
 
 
@@ -576,8 +586,12 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.reduce((acc, elem) => {
+    const value = childrenSelector(elem);
+    acc.push(value);
+    return acc.flat();
+  }, []);
 }
 
 
@@ -593,8 +607,8 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  return indexes.reduce((acc, elem) => acc[elem], arr);
 }
 
 
@@ -616,8 +630,17 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let center = [];
+  const head = arr.slice(0, Math.floor(arr.length / 2));
+  const tail = arr.slice(-Math.floor(arr.length / 2));
+  if (arr.length === 1) return arr;
+  if (arr.length === 2) return arr.reverse();
+  if (arr.length % 2 !== 0) {
+    center = arr[Math.floor(arr.length / 2)];
+    return tail.concat(center, head);
+  }
+  return tail.concat(head);
 }
 
 
